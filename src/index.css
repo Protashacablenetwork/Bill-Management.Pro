@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary: #ea580c;
+    --primary-hover: #c2410c;
+    --primary-light: #fff7ed;
+    --primary-ring: rgba(234, 88, 12, 0.25);
+  }
+
+  body {
+    font-family: 'Hind Siliguri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom Color Themes */
+body.theme-blue {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --primary-ring: rgba(37, 99, 235, 0.25);
+}
+body.theme-green {
+  --primary: #16a34a;
+  --primary-hover: #15803d;
+  --primary-light: #f0fdf4;
+  --primary-ring: rgba(22, 163, 74, 0.25);
+}
+body.theme-purple {
+  --primary: #7c3aed;
+  --primary-hover: #6d28d9;
+  --primary-light: #f5f3ff;
+  --primary-ring: rgba(124, 58, 237, 0.25);
+}
+body.theme-pink {
+  --primary: #db2777;
+  --primary-hover: #be185d;
+  --primary-light: #fdf2f8;
+  --primary-ring: rgba(219, 39, 119, 0.25);
+}
+body.theme-teal {
+  --primary: #0d9488;
+  --primary-hover: #0f766e;
+  --primary-light: #f0fdfa;
+  --primary-ring: rgba(13, 148, 136, 0.25);
+}
+
+/* Print styling */
+@media print {
+  aside, nav, .no-print, button, .top-header, #toast {
+    display: none !important;
+  }
+  main {
+    margin-left: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+}

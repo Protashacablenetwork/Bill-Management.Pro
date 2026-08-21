@@ -1,0 +1,8 @@
+{
+  "name": "বিল ম্যানেজার প্রো - Bill Manager",
+  "description": "স্মার্ট বিল ব্যবস্থাপনা ড্যাশবোর্ড - নেট বিল, ডিস বিল, নেট সংযোগ ও বকেয়া বিল ট্র্যাকিং এবং বিশ্লেষণ।",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

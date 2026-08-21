@@ -1,0 +1,2951 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#ea580c">
+    <title>বিল ম্যানেজার প্রো - Bill Manager Pro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* ============================================================
+           CSS VARIABLES & COLOR THEMES
+           ============================================================ */
+        :root {
+            --primary: #ea580c;
+            --primary-dark: #c2410c;
+            --primary-light: #f97316;
+            --primary-gradient: linear-gradient(135deg, #f97316, #ea580c, #c2410c);
+            --primary-soft: #fff7ed;
+            --primary-glow: rgba(234, 88, 12, 0.25);
+
+            --bg-body: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-sidebar: #ffffff;
+            --bg-input: #f1f5f9;
+            --bg-hover: #f1f5f9;
+
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --text-white: #ffffff;
+
+            --border-color: #e2e8f0;
+            --border-focus: #ea580c;
+
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.09);
+            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
+
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 26px;
+            --radius-full: 9999px;
+
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+            --nav-width: 82px;
+            --font: 'Hind Siliguri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* ===== DARK THEME ===== */
+        body.dark {
+            --bg-body: #090d16;
+            --bg-card: #131b2e;
+            --bg-sidebar: #101726;
+            --bg-input: #1b2438;
+            --bg-hover: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-color: #1e293b;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.6);
+            --primary-soft: #2a1b12;
+            --primary-glow: rgba(249, 115, 22, 0.2);
+        }
+
+        /* ===== COLOR ACCENT THEMES ===== */
+        body.theme-blue {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --primary-gradient: linear-gradient(135deg, #3b82f6, #2563eb, #1d4ed8);
+            --primary-soft: #eff6ff;
+            --primary-glow: rgba(37, 99, 235, 0.25);
+            --border-focus: #2563eb;
+        }
+        body.dark.theme-blue { --primary-soft: #142038; }
+
+        body.theme-green {
+            --primary: #16a34a;
+            --primary-dark: #15803d;
+            --primary-light: #22c55e;
+            --primary-gradient: linear-gradient(135deg, #22c55e, #16a34a, #15803d);
+            --primary-soft: #f0fdf4;
+            --primary-glow: rgba(22, 163, 74, 0.25);
+            --border-focus: #16a34a;
+        }
+        body.dark.theme-green { --primary-soft: #0d2818; }
+
+        body.theme-purple {
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #8b5cf6;
+            --primary-gradient: linear-gradient(135deg, #8b5cf6, #7c3aed, #6d28d9);
+            --primary-soft: #f5f3ff;
+            --primary-glow: rgba(124, 58, 237, 0.25);
+            --border-focus: #7c3aed;
+        }
+        body.dark.theme-purple { --primary-soft: #201438; }
+
+        body.theme-pink {
+            --primary: #db2777;
+            --primary-dark: #be185d;
+            --primary-light: #ec4899;
+            --primary-gradient: linear-gradient(135deg, #ec4899, #db2777, #be185d);
+            --primary-soft: #fdf2f8;
+            --primary-glow: rgba(219, 39, 119, 0.25);
+            --border-focus: #db2777;
+        }
+        body.dark.theme-pink { --primary-soft: #301020; }
+
+        body.theme-teal {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #14b8a6;
+            --primary-gradient: linear-gradient(135deg, #14b8a6, #0d9488, #0f766e);
+            --primary-soft: #f0fdfa;
+            --primary-glow: rgba(13, 148, 136, 0.25);
+            --border-focus: #0d9488;
+        }
+        body.dark.theme-teal { --primary-soft: #0c2624; }
+
+        /* ============================================================
+           RESET & BASE
+           ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            transition: background-color 0.25s ease, color 0.25s ease;
+            min-height: 100vh;
+            display: flex;
+            line-height: 1.5;
+            font-size: 15px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* ============================================================
+           SIDEBAR OVERLAY
+           ============================================================ */
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ============================================================
+           SIDEBAR
+           ============================================================ */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--nav-width);
+            height: 100vh;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 14px 0 12px;
+            z-index: 999;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s ease;
+            overflow-y: auto;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .sidebar-top-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 8px;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-close-btn {
+            display: none;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 14px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .sidebar-close-btn:hover {
+            background: #fee2e2;
+            color: #ef4444;
+            border-color: #fca5a5;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            width: 100%;
+        }
+        .sidebar-logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 4px 12px var(--primary-glow);
+            transition: transform 0.2s ease;
+        }
+        .sidebar-logo:hover .sidebar-logo-icon {
+            transform: scale(1.08);
+        }
+        .sidebar-logo-text {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary);
+            text-align: center;
+            line-height: 1.15;
+        }
+        .sidebar-logo-text span {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 10.5px;
+            display: block;
+        }
+
+        .sidebar-divider {
+            width: 32px;
+            height: 1px;
+            background: var(--border-color);
+            margin: 4px 0 10px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            width: 100%;
+            padding: 0 8px;
+        }
+
+        .sidebar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: transparent;
+            border: none;
+            padding: 10px 4px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            width: 100%;
+            font-family: inherit;
+            position: relative;
+        }
+        .sidebar-item:hover {
+            background: var(--primary-soft);
+            color: var(--primary);
+        }
+        .sidebar-item .svg-icon {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+            transition: transform 0.2s ease;
+        }
+        .sidebar-item:hover .svg-icon {
+            transform: scale(1.1);
+        }
+        .sidebar-item .side-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+        
+        /* Vibrant Sidebar Active State */
+        .sidebar-item.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-weight: 800;
+        }
+        .sidebar-item.active .svg-icon {
+            stroke: var(--primary);
+            stroke-width: 2.5;
+        }
+        .sidebar-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 28px;
+            background: var(--primary-gradient);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .sidebar-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 8px 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .theme-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+        }
+        .theme-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        .theme-dot:hover { transform: scale(1.2); }
+        .theme-dot.active {
+            box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--primary);
+        }
+        .theme-dot.orange { background: #ea580c; }
+        .theme-dot.blue { background: #2563eb; }
+        .theme-dot.green { background: #16a34a; }
+        .theme-dot.purple { background: #7c3aed; }
+        .theme-dot.pink { background: #db2777; }
+        .theme-dot.teal { background: #0d9488; }
+
+        .sidebar-developer {
+            font-size: 9px;
+            color: var(--text-muted);
+            text-align: center;
+            line-height: 1.3;
+        }
+        .sidebar-developer strong {
+            color: var(--primary);
+            display: block;
+        }
+
+        /* ============================================================
+           MAIN CONTENT & STRUCTURED TOP HEADER
+           ============================================================ */
+        .main-content {
+            flex: 1;
+            margin-left: var(--nav-width);
+            min-height: 100vh;
+            padding: 0 24px 30px;
+            max-width: calc(100% - var(--nav-width));
+        }
+
+        .top-header {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 0 14px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            background: rgba(248, 250, 252, 0.94);
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        body.dark .top-header {
+            background: rgba(9, 13, 22, 0.94);
+        }
+
+        /* ROW 1: Title on left, Language & Dark/Light Toggle on TOP RIGHT */
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            gap: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .header-title h1 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+        .header-title h1 .badge-new {
+            font-size: 9px;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 2px 7px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .header-title p {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* Top Right: Language and Theme Toggle (In top line) */
+        .header-top-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        /* ROW 2: Dropdowns & Export Button on the red circled spot (same line) */
+        .header-controls-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px;
+            width: 100%;
+            flex-wrap: nowrap;
+        }
+
+        .header-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: var(--shadow-sm);
+            white-space: nowrap;
+        }
+        .header-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
+        }
+        .header-btn select {
+            background: transparent;
+            border: none;
+            color: inherit;
+            font-weight: 600;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+            outline: none;
+        }
+        .header-btn select option {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .header-select-net {
+            flex: 1.1;
+            min-width: 0;
+        }
+        .header-select-net select {
+            width: 100%;
+            text-overflow: ellipsis;
+        }
+        .header-select-month {
+            flex: 0.9;
+            min-width: 0;
+        }
+        .header-select-month select {
+            width: 100%;
+        }
+        .header-btn-export, .header-btn-refresh {
+            flex-shrink: 0;
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-color: var(--primary);
+            font-weight: 700;
+        }
+        .header-btn-export:hover, .header-btn-refresh:hover {
+            background: var(--primary);
+            color: white;
+        }
+        .desktop-only-btn {
+            display: inline-flex;
+        }
+        .mobile-only-btn {
+            display: none;
+        }
+
+        /* ============================================================
+           NOTICE TICKER (PERFECTLY VERTICALLY CENTERED)
+           ============================================================ */
+        .notice-ticker {
+            background: linear-gradient(135deg, #0b1e33, #132f52);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid rgba(255, 215, 0, 0.25);
+            margin: 14px 0 16px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            height: 38px;
+            min-height: 38px;
+            padding: 0;
+        }
+        .notice-badge {
+            background: #f59e0b;
+            color: #000;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 0 12px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .notice-scroll {
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+        .notice-marquee {
+            white-space: nowrap;
+            font-size: 12px;
+            font-weight: 500;
+            color: #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            line-height: 38px;
+            margin: 0;
+            padding: 0;
+        }
+        .notice-marquee strong { color: #fde047; }
+        .notice-marquee .highlight {
+            background: #ef4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            margin: 0 6px;
+            font-size: 10.5px;
+            display: inline-block;
+            line-height: normal;
+        }
+
+        /* ============================================================
+           STATS GRID
+           ============================================================ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 16px 14px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        .stat-card:hover::before { opacity: 1; }
+
+        .stat-card .stat-icon-wrap {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .stat-card .stat-icon-wrap svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2.2;
+        }
+        .stat-card .stat-icon-wrap.orange { background: #fff7ed; color: #ea580c; }
+        .stat-card .stat-icon-wrap.green { background: #ecfdf5; color: #10b981; }
+        .stat-card .stat-icon-wrap.red { background: #fef2f2; color: #ef4444; }
+        .stat-card .stat-icon-wrap.blue { background: #eff6ff; color: #3b82f6; }
+
+        body.dark .stat-card .stat-icon-wrap.orange { background: #2a1b12; color: #f97316; }
+        body.dark .stat-card .stat-icon-wrap.green { background: #072a1f; color: #34d399; }
+        body.dark .stat-card .stat-icon-wrap.red { background: #331313; color: #f87171; }
+        body.dark .stat-card .stat-icon-wrap.blue { background: #112340; color: #60a5fa; }
+
+        .stat-card .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+        .stat-card .stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin: 2px 0;
+            letter-spacing: -0.5px;
+        }
+        .stat-card .stat-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ============================================================
+           CHARTS SECTION
+           ============================================================ */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .chart-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .chart-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+        .chart-container {
+            position: relative;
+            height: 200px;
+        }
+        .chart-container-tall {
+            position: relative;
+            height: 240px;
+        }
+
+        /* ============================================================
+           SEARCH & FILTERS
+           ============================================================ */
+        .search-container {
+            display: flex;
+            gap: 10px;
+            margin: 14px 0 16px;
+            flex-wrap: wrap;
+        }
+        .search-input-wrap {
+            flex: 1;
+            position: relative;
+            min-width: 260px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 10px 16px 10px 38px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+        }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 6px;
+            background: var(--bg-input);
+            padding: 3px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+        }
+        .filter-tab {
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-family: inherit;
+        }
+        
+        /* Vibrant Active Filter Tab */
+        .filter-tab.active {
+            background: var(--primary-gradient);
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px var(--primary-glow);
+            font-weight: 700;
+        }
+
+        /* ============================================================
+           TABLE SECTION
+           ============================================================ */
+        .table-wrapper {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            overflow-x: auto;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+            font-size: 13px;
+        }
+        .bill-table thead {
+            background: var(--bg-input);
+        }
+        .bill-table th {
+            padding: 12px 10px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border-color);
+            text-align: center;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .bill-table td {
+            padding: 10px 10px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            vertical-align: middle;
+        }
+        .bill-table tbody tr {
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .bill-table tbody tr:hover {
+            background: var(--bg-hover);
+        }
+        .bill-table .name-cell {
+            text-align: left !important;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .bill-table .amount-paid { color: #10b981; font-weight: 700; }
+        .bill-table .amount-due { color: #ef4444; font-weight: 700; }
+        .bill-table .amount-zero { color: var(--text-muted); font-weight: 600; }
+        .bill-table .amount-total { color: var(--primary); font-weight: 700; }
+        .bill-table .amount-total.has-due { color: #ef4444 !important; font-weight: 700; }
+
+        .badge-status {
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-status.paid { background: #dcfce7; color: #15803d; }
+        .badge-status.due { background: #fee2e2; color: #b91c1c; }
+        .badge-status.partial { background: #fef3c7; color: #b45309; }
+        body.dark .badge-status.paid { background: #072a1f; color: #6ee7b7; }
+        body.dark .badge-status.due { background: #331313; color: #fca5a5; }
+        body.dark .badge-status.partial { background: #2f1e09; color: #fcd34d; }
+
+        /* Loading Spinner */
+        .table-loading-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 36px 16px;
+            gap: 12px;
+        }
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        body.dark .loading-spinner {
+            border-color: rgba(255, 255, 255, 0.15);
+            border-top-color: var(--primary);
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ============================================================
+           MODAL
+           ============================================================ */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 16px;
+        }
+        .modal.active { opacity: 1; visibility: visible; }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 22px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-color);
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.96);
+            transition: transform 0.25s ease;
+        }
+        .modal.active .modal-content { transform: scale(1); }
+
+        .modal-header {
+            font-size: 17px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-primary);
+        }
+        .detail-row {
+            display: flex;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            gap: 8px;
+            align-items: center;
+        }
+        .detail-label {
+            font-weight: 700;
+            width: 90px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            flex-shrink: 0;
+        }
+        .detail-value {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .modal-btn-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 16px;
+        }
+        .modal-btn {
+            padding: 9px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        .modal-btn.primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+        }
+        .modal-btn.secondary {
+            background: var(--bg-input);
+            color: var(--text-primary);
+        }
+        .modal-btn.whatsapp {
+            background: #22c55e;
+            color: white;
+            border: none;
+            grid-column: span 2;
+        }
+        .modal-btn:hover { transform: translateY(-1px); }
+
+        .copy-pill {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-full);
+            padding: 2px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* ============================================================
+           BOTTOM NAV (Mobile) - VIBRANT ACTIVE STATE
+           ============================================================ */
+        .bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 6px 12px;
+            padding-bottom: max(6px, env(safe-area-inset-bottom));
+            z-index: 990;
+            justify-content: space-around;
+            backdrop-filter: blur(12px);
+        }
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 5px 12px;
+            border-radius: var(--radius-md);
+            transition: var(--transition);
+        }
+        .nav-btn .svg-icon {
+            width: 20px;
+            height: 20px;
+            stroke-width: 2;
+            transition: transform 0.2s ease;
+        }
+        
+        /* Vibrant Bottom Nav Active Color */
+        .nav-btn.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-weight: 800;
+        }
+        .nav-btn.active .svg-icon {
+            stroke: var(--primary);
+            stroke-width: 2.5;
+            transform: translateY(-1px);
+        }
+
+        /* ============================================================
+           TOAST
+           ============================================================ */
+        .toast {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: var(--radius-full);
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 2500;
+            opacity: 0;
+            transition: var(--transition);
+            pointer-events: none;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast.success { border-color: #86efac; color: #166534; background: #dcfce7; }
+        .toast.error { border-color: #fca5a5; color: #991b1b; background: #fee2e2; }
+        .toast.warning { border-color: #fcd34d; color: #92400e; background: #fef3c7; }
+        body.dark .toast.success { background: #072a1f; color: #6ee7b7; border-color: #059669; }
+        body.dark .toast.error { background: #331313; color: #fca5a5; border-color: #dc2626; }
+        body.dark .toast.warning { background: #2f1e09; color: #fcd34d; border-color: #d97706; }
+
+        /* ============================================================
+           PRINT STYLES (STRICT SINGLE PAGE VOUCHER)
+           ============================================================ */
+        #receiptPrintArea {
+            display: none;
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 6mm 10mm;
+            }
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                font-size: 12px !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                max-height: 100vh !important;
+                overflow: hidden !important;
+            }
+            body * {
+                visibility: hidden !important;
+            }
+            #receiptPrintArea, #receiptPrintArea * {
+                visibility: visible !important;
+            }
+            #receiptPrintArea {
+                position: absolute !important;
+                left: 0 !important;
+                top: 0 !important;
+                width: 100% !important;
+                max-height: 100vh !important;
+                display: block !important;
+                page-break-before: avoid !important;
+                page-break-after: avoid !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .print-receipt-container {
+                border: 2px solid #0f172a;
+                border-radius: 10px;
+                padding: 14px 18px;
+                max-width: 580px;
+                margin: 0 auto;
+                font-family: 'Hind Siliguri', sans-serif;
+                background: #ffffff;
+                box-sizing: border-box;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+            .print-header {
+                text-align: center;
+                border-bottom: 2px dashed #94a3b8;
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+            .print-header h2 {
+                font-size: 19px;
+                font-weight: 800;
+                color: #0f172a;
+                margin: 0;
+            }
+            .print-header p {
+                font-size: 11px;
+                color: #475569;
+                margin: 2px 0 0 0;
+            }
+            .print-info-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 5px 12px;
+                font-size: 12px;
+                margin-bottom: 10px;
+                background: #f8fafc;
+                padding: 8px 12px;
+                border-radius: 6px;
+                border: 1px solid #e2e8f0;
+            }
+            .print-info-item {
+                display: flex;
+                gap: 5px;
+            }
+            .print-info-item strong {
+                color: #334155;
+                min-width: 85px;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 10px;
+            }
+            .print-table th {
+                background: #0f172a;
+                color: #ffffff;
+                padding: 5px 8px;
+                text-align: left;
+                font-size: 11.5px;
+            }
+            .print-table td {
+                padding: 5px 8px;
+                border-bottom: 1px solid #cbd5e1;
+                font-size: 12px;
+            }
+            .print-summary {
+                background: #f1f5f9;
+                padding: 8px 12px;
+                border-radius: 6px;
+                margin-bottom: 14px;
+            }
+            .print-summary-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 3px 0;
+                font-size: 12px;
+            }
+            .print-summary-row.total {
+                border-top: 1px solid #94a3b8;
+                font-size: 13.5px;
+                font-weight: 800;
+                padding-top: 4px;
+                margin-top: 3px;
+            }
+            .print-signatures {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 22px;
+                padding-top: 4px;
+            }
+            .print-sign-box {
+                text-align: center;
+                border-top: 1px dashed #64748b;
+                width: 140px;
+                padding-top: 4px;
+                font-size: 11px;
+                font-weight: 600;
+                color: #334155;
+            }
+            .print-footer {
+                text-align: center;
+                font-size: 10px;
+                color: #64748b;
+                margin-top: 10px;
+                border-top: 1px solid #e2e8f0;
+                padding-top: 4px;
+            }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .charts-section { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 230px;
+            }
+            .sidebar.mobile-open {
+                transform: translateX(0);
+                box-shadow: var(--shadow-xl);
+            }
+            .sidebar-close-btn {
+                display: flex;
+            }
+            .sidebar.mobile-open .sidebar-top-bar {
+                justify-content: flex-start;
+                padding: 0 12px;
+            }
+            .sidebar.mobile-open .sidebar-logo {
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+            }
+            .sidebar.mobile-open .sidebar-logo-text {
+                text-align: left;
+                font-size: 15px;
+            }
+            .sidebar.mobile-open .sidebar-item {
+                flex-direction: row;
+                gap: 12px;
+                padding: 10px 14px;
+            }
+            .sidebar.mobile-open .sidebar-item .side-label {
+                font-size: 13px;
+            }
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 0 14px 75px;
+            }
+            .mobile-toggle { display: block; }
+            .bottom-nav { display: flex; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .desktop-only-btn { display: none !important; }
+            .mobile-only-btn { display: inline-flex !important; }
+        }
+        @media (max-width: 480px) {
+            .header-title h1 { font-size: 15px; }
+            .header-btn { padding: 5px 8px; font-size: 11px; }
+            .stat-card .stat-value { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== SIDEBAR OVERLAY (CLOSES ON OUTSIDE CLICK) ===== -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- ===== SIDEBAR WITH CODED SVG ICONS & PRO BRAND LOGO ===== -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-top-bar">
+            <div class="sidebar-logo" onclick="navigateTo('dashboard'); closeSidebar();" title="বিল ম্যানেজার হোম">
+                <div class="sidebar-logo-icon">
+                    <svg style="width:22px;height:22px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path>
+                        <path d="M8 8h8"></path>
+                        <path d="M8 12h8"></path>
+                        <path d="M12 16h4"></path>
+                    </svg>
+                </div>
+                <div class="sidebar-logo-text">
+                    <strong id="txtSideLogoMain">বিল ম্যানেজার</strong>
+                    <span id="txtSideLogoSub">PRO SYSTEM</span>
+                </div>
+            </div>
+            <button class="sidebar-close-btn" id="sidebarCloseBtn" onclick="closeSidebar()" title="বন্ধ করুন">✕</button>
+        </div>
+        <div class="sidebar-divider"></div>
+        <nav class="sidebar-nav">
+            <!-- Dashboard SVG -->
+            <button class="sidebar-item active" onclick="navigateTo('dashboard'); closeSidebar();">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <rect width="7" height="9" x="3" y="3" rx="1.5"></rect>
+                    <rect width="7" height="5" x="14" y="3" rx="1.5"></rect>
+                    <rect width="7" height="9" x="14" y="12" rx="1.5"></rect>
+                    <rect width="7" height="5" x="3" y="16" rx="1.5"></rect>
+                </svg>
+                <span class="side-label" id="lblNavDashboard">ড্যাশবোর্ড</span>
+            </button>
+            <!-- All Bills SVG -->
+            <button class="sidebar-item" onclick="navigateTo('all'); closeSidebar();">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path>
+                    <path d="M8 7h8"></path>
+                    <path d="M8 11h8"></path>
+                    <path d="M8 15h5"></path>
+                </svg>
+                <span class="side-label" id="lblNavAll">সকল বিল</span>
+            </button>
+            <!-- Paid SVG -->
+            <button class="sidebar-item" onclick="navigateTo('paid'); closeSidebar();">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>
+                <span class="side-label" id="lblNavPaid">পরিশোধিত</span>
+            </button>
+            <!-- Due SVG -->
+            <button class="sidebar-item" onclick="navigateTo('due'); closeSidebar();">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                    <line x1="12" x2="12" y1="9" y2="13"></line>
+                    <line x1="12" x2="12.01" y1="17" y2="17"></line>
+                </svg>
+                <span class="side-label" id="lblNavDue">বকেয়া</span>
+            </button>
+        </nav>
+        <div class="sidebar-bottom">
+            <div class="theme-selector">
+                <span class="theme-dot orange active" onclick="setColorTheme('orange')" title="অরেঞ্জ"></span>
+                <span class="theme-dot blue" onclick="setColorTheme('blue')" title="নীল"></span>
+                <span class="theme-dot green" onclick="setColorTheme('green')" title="সবুজ"></span>
+                <span class="theme-dot purple" onclick="setColorTheme('purple')" title="বেগুনি"></span>
+                <span class="theme-dot pink" onclick="setColorTheme('pink')" title="গোলাপি"></span>
+                <span class="theme-dot teal" onclick="setColorTheme('teal')" title="টিল"></span>
+            </div>
+            <div class="sidebar-developer">
+                Dev: <strong>Md Riad Mia</strong>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- TOP HEADER: Row 1 has Title + Language & Dark Mode; Row 2 has Dropdowns & Export button in same line -->
+        <header class="top-header">
+            <!-- 1. TOP ROW: Title on left, Language & Dark/Light Toggle on TOP RIGHT -->
+            <div class="header-top-row">
+                <div class="header-left">
+                    <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+                    <div class="header-title">
+                        <h1>
+                            <span id="txtHeaderTitle">বিল ম্যানেজার</span>
+                            <span class="badge-new">PRO</span>
+                        </h1>
+                        <p id="txtHeaderSubtitle">স্মার্ট বিল ব্যবস্থাপনা সিস্টেম</p>
+                    </div>
+                </div>
+
+                <!-- Language & Dark/Light Toggle buttons placed right on top header line -->
+                <div class="header-top-right">
+                    <!-- Language Toggle Button -->
+                    <button class="header-btn" onclick="toggleLanguage()" id="langBtn" title="ভাষা পরিবর্তন">
+                        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" x2="22" y1="12" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <span id="langBtnText">🇧🇩 বাংলা</span>
+                    </button>
+
+                    <!-- Dark / Light Mode Toggle Button -->
+                    <button class="header-btn" onclick="toggleTheme()" id="themeBtn" title="ডার্ক / লাইট মোড">
+                        🌙
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. BOTTOM ROW: Dropdowns & Export Button (in red circled spot on the same line) -->
+            <div class="header-controls-row">
+                <!-- Net Type Selection -->
+                <div class="header-btn header-select-net">
+                    <svg style="width:14px;height:14px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    <select id="netSelect" onchange="onNetTypeChange()">
+                        <option value="নেট বিল">নেট বিল (Net Bill)</option>
+                        <option value="ডিস বিল">ডিস বিল (Dis Bill)</option>
+                        <option value="নেট সংযোগ">নেট সংযোগ (Connection)</option>
+                        <option value="বকেয়া বিল">বকেয়া বিল (Due Bill)</option>
+                    </select>
+                </div>
+
+                <!-- Month Selection -->
+                <div class="header-btn header-select-month">
+                    <svg style="width:14px;height:14px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                        <line x1="16" x2="16" y1="2" y2="6"></line>
+                        <line x1="8" x2="8" y1="2" y2="6"></line>
+                        <line x1="3" x2="21" y1="10" y2="10"></line>
+                    </svg>
+                    <select id="monthSelect" onchange="onMonthChange()"></select>
+                </div>
+
+                <!-- Export Excel (Desktop Only) -->
+                <button class="header-btn header-btn-export desktop-only-btn" onclick="exportCurrentTable()" title="এক্সেল ডাউনলোড">
+                    <svg style="width:14px;height:14px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" x2="12" y1="15" y2="3"></line>
+                    </svg>
+                    <span id="txtExportBtn">এক্সপোর্ট</span>
+                </button>
+
+                <!-- Refresh Button (Mobile View Only) -->
+                <button class="header-btn header-btn-refresh mobile-only-btn" onclick="handleManualRefresh()" title="রিফ্রেশ করুন" id="btnRefreshMobile">
+                    <svg id="refreshBtnIcon" style="width:14px;height:14px;flex-shrink:0;transition:transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                    </svg>
+                    <span id="txtRefreshBtn">রিফ্রেশ</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Notice Banner (Vertically Centered) -->
+        <div class="notice-ticker">
+            <div class="notice-badge" id="txtNoticeBadge">📢 নোটিশ</div>
+            <div class="notice-scroll">
+                <marquee class="notice-marquee" behavior="scroll" direction="left" scrollamount="4" onmouseover="this.stop()" onmouseout="this.start()" id="txtNoticeText">
+                    ⚡ <strong>দ্রুত বকেয়া বিল আদায় করুন</strong> ➤ সম্মানিত সকলের অবগতির জন্য জানানো যাচ্ছে যে, প্রতি মাসের ৫ তারিখের মধ্যে বকেয়া বিল পরিশোধ করুন। <span class="highlight">🔴 নোটিশ</span> নিয়মিত রসিদ প্রদান করুন।
+                </marquee>
+            </div>
+        </div>
+
+        <!-- Warning / Status Box -->
+        <div id="statusNotice" style="display:none; padding:10px 14px; border-radius:8px; margin-bottom:14px; font-size:12px; font-weight:600;"></div>
+
+        <!-- ===== VIEW: DASHBOARD ===== -->
+        <section id="viewDashboard">
+            <!-- Stats Grid with Coded Vector Icons -->
+            <div class="stats-grid">
+                <div class="stat-card" onclick="navigateTo('all')">
+                    <div class="stat-icon-wrap orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path>
+                            <path d="M8 7h8"></path>
+                            <path d="M8 11h8"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-label" id="lblStatAll">সকল বিল</div>
+                    <div class="stat-value" id="statAllCount">0</div>
+                    <div class="stat-sub" id="statMonthName">চলতি মাস</div>
+                </div>
+                <div class="stat-card" onclick="navigateTo('paid')">
+                    <div class="stat-icon-wrap green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-label" id="lblStatPaid">পরিশোধিত টাকা</div>
+                    <div class="stat-value" id="statPaidTotal">0 ৳</div>
+                    <div class="stat-sub" id="statPaidRate">0% আদায়</div>
+                </div>
+                <div class="stat-card" onclick="navigateTo('due')">
+                    <div class="stat-icon-wrap red">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                            <line x1="12" x2="12" y1="9" y2="13"></line>
+                            <line x1="12" x2="12.01" y1="17" y2="17"></line>
+                        </svg>
+                    </div>
+                    <div class="stat-label" id="lblStatDue">বকেয়া টাকা</div>
+                    <div class="stat-value" id="statDueTotal">0 ৳</div>
+                    <div class="stat-sub" id="statDueRate">0% বাকি</div>
+                </div>
+                <div class="stat-card" onclick="navigateTo('all')">
+                    <div class="stat-icon-wrap blue">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                            <path d="M12 6v12"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-label" id="lblStatTotal">সর্বমোট পরিমাণ</div>
+                    <div class="stat-value" id="statGrandTotal">0 ৳</div>
+                    <div class="stat-sub" id="statTotalBills">0 টি রেকর্ড</div>
+                </div>
+            </div>
+
+            <!-- Charts Section 1: Trend & Paid vs Due -->
+            <div class="charts-section">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title" id="txtChart1Title">📈 গত ৭ দিনের কালেকশন ট্রেন্ড</div>
+                            <div class="chart-sub" id="txtChart1Sub">দৈনিক বিল সংগ্রহ বিশ্লেষণ</div>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="dailyTrendChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div>
+                            <div class="chart-title" id="txtChart2Title">🥧 পরিশোধিত বনাম বকেয়া</div>
+                            <div class="chart-sub" id="txtChart2Sub">আদায় অনুপাত</div>
+                        </div>
+                    </div>
+                    <div class="chart-container"><canvas id="paidDueChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Charts Section 2: Month-wise Income (Net Bill + Dish Bill for ALL Months) -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title" id="txtMonthlyIncomeTitle">📊 মাসভিত্তিক আয় (নেট বিল + ডিস বিল)</div>
+                        <div class="chart-sub" id="txtMonthlyIncomeSub">সকল মাসের সমন্বিত বিল সংগ্রহ বিশ্লেষণ</div>
+                    </div>
+                </div>
+                <div class="chart-container-tall"><canvas id="monthlyIncomeChart"></canvas></div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <div class="chart-title" id="txtRecentTitle">🔄 সাম্প্রতিক লেনদেন</div>
+                        <div class="chart-sub" id="txtRecentSub">সর্বশেষ পরিশোধিত বিলের তালিকা</div>
+                    </div>
+                    <span id="recentTxCount" style="font-size:11px; background:var(--bg-input); padding:3px 10px; border-radius:20px; font-weight:700;">০টি রেকর্ড</span>
+                </div>
+                <div id="recentActivityList"></div>
+            </div>
+        </section>
+
+        <!-- ===== VIEW: TABLE & SEARCH ===== -->
+        <section id="viewTable" style="display:none;">
+            <div class="search-container">
+                <div class="search-input-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" x2="16.65" y1="21" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="tableSearch" class="search-input" placeholder="গ্রাহকের নাম, মোবাইল, আইডি বা ঠিকানা দিয়ে খুঁজুন..." oninput="onSearchInput()">
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-tab="all" onclick="setTableFilter('all')" id="tabAll">সকল</button>
+                    <button class="filter-tab" data-tab="paid" onclick="setTableFilter('paid')" id="tabPaid">পরিশোধিত</button>
+                    <button class="filter-tab" data-tab="due" onclick="setTableFilter('due')" id="tabDue">বকেয়া</button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="bill-table">
+                    <thead>
+                        <tr id="tableHeadRow">
+                            <th id="thSl">ক্রমিক</th>
+                            <th id="thId">আইডি</th>
+                            <th id="thName">গ্রাহকের নাম</th>
+                            <th id="thPaid">পরিশোধিত</th>
+                            <th id="thDue">বকেয়া</th>
+                            <th id="thTotal">সর্বমোট</th>
+                            <th id="thMobile">মোবাইল</th>
+                            <th id="thDate">তারিখ</th>
+                            <th id="thAddress">ঠিকানা</th>
+                            <th id="thStatus">স্ট্যাটাস</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== BOTTOM NAV (MOBILE) WITH VIBRANT ACTIVE STATE ===== -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" onclick="navigateTo('dashboard'); closeSidebar();">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+                <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+                <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+                <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+            </svg>
+            <span id="lblBottomDash">ড্যাশবোর্ড</span>
+        </button>
+        <button class="nav-btn" onclick="navigateTo('all'); closeSidebar();">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"></path>
+            </svg>
+            <span id="lblBottomAll">সকল</span>
+        </button>
+        <button class="nav-btn" onclick="navigateTo('paid'); closeSidebar();">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="m9 12 2 2 4-4"></path>
+            </svg>
+            <span id="lblBottomPaid">পরিশোধিত</span>
+        </button>
+        <button class="nav-btn" onclick="navigateTo('due'); closeSidebar();">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            </svg>
+            <span id="lblBottomDue">বকেয়া</span>
+        </button>
+    </nav>
+
+    <!-- ===== CUSTOMER DETAILS MODAL ===== -->
+    <div id="customerModal" class="modal" onclick="if(event.target===this) closeModal()">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span id="txtModalHeader">📄 বিলের বিস্তারিত বিবরণ</span>
+                <button onclick="closeModal()" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-muted);">✕</button>
+            </div>
+            <div id="modalBody"></div>
+            <div class="modal-btn-row">
+                <button class="modal-btn secondary" onclick="printReceipt()" id="btnModalPrint">🖨️ রসিদ প্রিন্ট</button>
+                <button class="modal-btn primary" onclick="closeModal()" id="btnModalClose">বন্ধ করুন</button>
+                <button class="modal-btn whatsapp" id="btnSendSms" onclick="sendDueSms()">📱 বকেয়া তাগাদা এসএমএস পাঠান</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TOAST ===== -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== HIDDEN RECEIPT PRINT AREA (RENDERED AS SINGLE PAGE ON PRINT) ===== -->
+    <div id="receiptPrintArea"></div>
+
+    <script>
+        // ============================================================
+        // CONSTANTS & SHEET LINKS
+        // ============================================================
+        const ALL_MONTHS = ["জানুয়ারি", "ফেব্রুয়ারি", "মার্চ", "এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট", "সেপ্টেম্বর", "অক্টোবর", "নভেম্বর", "ডিসেম্বর"];
+
+        const NET_BILL_LINKS = {
+            "জানুয়ারি": "",
+            "ফেব্রুয়ারি": "",
+            "মার্চ": "",
+            "এপ্রিল": "https://docs.google.com/spreadsheets/d/1JzUL1DOA_ubXONu9PhpCfo9oKeFj__o4oCGeeksV-pA/export?format=xlsx",
+            "মে": "https://docs.google.com/spreadsheets/d/1nSM8fZUwHxUSZQc88u8Oaquch21226fYaC9n85NV3G0/export?format=xlsx",
+            "জুন": "https://docs.google.com/spreadsheets/d/1cPxErMlxd24-YJPN6mBmA-3xPUjG_Ql3lMXEL8dFPzY/export?format=xlsx",
+            "জুলাই": "https://docs.google.com/spreadsheets/d/1LWGmlA0yJwh6v1hQhpx4RrFeFBb_zW51D3GPehme-7s/export?format=xlsx",
+            "আগস্ট": "https://docs.google.com/spreadsheets/d/1gZoIiCAYhUZW5nSQCUb6OoNDiNY-087JafIQGr0JaZA/export?format=xlsx",
+            "সেপ্টেম্বর": "",
+            "অক্টোবর": "",
+            "নভেম্বর": "",
+            "ডিসেম্বর": ""
+        };
+
+        const DIS_BILL_LINKS = {
+            "জানুয়ারি": "",
+            "ফেব্রুয়ারি": "",
+            "মার্চ": "",
+            "এপ্রিল": "https://docs.google.com/spreadsheets/d/1FjkMU78ge41qPdHa40byxscAo7zJHMj-uB6M1jKGtQM/export?format=xlsx",
+            "মে": "https://docs.google.com/spreadsheets/d/1ai1RicItkQIl4_hpOhpP-olKc5FZLLrwLSKbYVFaS-M/export?format=xlsx",
+            "জুন": "https://docs.google.com/spreadsheets/d/186olqasPT2CV0Feqs4OUOsdkbWSsA6is6E-faFNVqxI/export?format=xlsx",
+            "জুলাই": "https://docs.google.com/spreadsheets/d/1Kzz2ac6SbeJgUyanm8YRVHKmMD3Cux-PfOSIsvurzAk/export?format=xlsx",
+            "আগস্ট": "https://docs.google.com/spreadsheets/d/1h8v6TiQJeberx9R6VGTcQu7t6LiudOKrBS9WVqA2cZ0/export?format=xlsx",
+            "সেপ্টেম্বর": "",
+            "অক্টোবর": "",
+            "নভেম্বর": "",
+            "ডিসেম্বর": ""
+        };
+
+        const NET_CONN_LINKS = {
+            "মে": "https://docs.google.com/spreadsheets/d/16bT82iDAlejCN86k2PXGzuDdojeLLKgICFVKybNIWJc/export?format=xlsx",
+            "জুন": "https://docs.google.com/spreadsheets/d/1MzoMhmIY3PGwIzzJ3Dif7FyNs_sHDXCYAu9oS7SKMtk/export?format=xlsx",
+            "জুলাই": "https://docs.google.com/spreadsheets/d/1eWAu9sMK8vrDlV3Ue35jYY6rfNVM0EOE43ecdZtY0yc/export?format=xlsx",
+            "আগস্ট": "https://docs.google.com/spreadsheets/d/144Km2kNlKpSdyQh9O1Q7BaIDf7bwOTGubTazHWMGPL0/export?format=xlsx"
+        };
+
+        const DUE_BILL_LINKS = {
+            "জুলাই": "https://docs.google.com/spreadsheets/d/1AWUhQdWBluPN3kGhG0jsLo224Qc0hst7DvM0PYwFVak/export?format=xlsx"
+        };
+
+        // Translations Dictionary
+        const I18N = {
+            bn: {
+                headerTitle: "বিল ম্যানেজার",
+                headerSubtitle: "স্মার্ট বিল ব্যবস্থাপনা সিস্টেম",
+                dashboard: "ড্যাশবোর্ড",
+                allBills: "সকল বিল",
+                paidBills: "পরিশোধিত",
+                dueBills: "বকেয়া",
+                totalBills: "সর্বমোট পরিমাণ",
+                paidAmount: "পরিশোধিত টাকা",
+                dueAmount: "বকেয়া টাকা",
+                export: "এক্সপোর্ট",
+                refresh: "রিফ্রেশ",
+                noticeBadge: "📢 নোটিশ",
+                chartTrend: "📈 গত ৭ দিনের কালেকশন ট্রেন্ড",
+                chartTrendSub: "দৈনিক বিল সংগ্রহ বিশ্লেষণ",
+                chartPaidDue: "🥧 পরিশোধিত বনাম বকেয়া",
+                chartPaidDueSub: "আদায় অনুপাত",
+                chartMonthly: "📊 মাসভিত্তিক আয় (নেট বিল + ডিস বিল)",
+                chartMonthlySub: "সকল মাসের সমন্বিত বিল সংগ্রহ বিশ্লেষণ",
+                recentTx: "🔄 সাম্প্রতিক লেনদেন",
+                recentTxSub: "সর্বশেষ পরিশোধিত বিলের তালিকা",
+                records: "টি রেকর্ড",
+                searchPlaceholder: "গ্রাহকের নাম, মোবাইল, আইডি বা ঠিকানা দিয়ে খুঁজুন...",
+                tabAll: "সকল",
+                tabPaid: "পরিশোধিত",
+                tabDue: "বকেয়া",
+                thSl: "ক্রমিক",
+                thId: "আইডি",
+                thName: "গ্রাহকের নাম",
+                thPaid: "পরিশোধিত",
+                thDue: "বকেয়া",
+                thTotal: "সর্বমোট",
+                thMobile: "মোবাইল",
+                thDate: "তারিখ",
+                thAddress: "ঠিকানা",
+                thStatus: "স্ট্যাটাস",
+                modalHeader: "📄 বিলের বিস্তারিত বিবরণ",
+                btnPrint: "🖨️ রসিদ প্রিন্ট",
+                btnClose: "বন্ধ করুন",
+                btnSms: "📱 বকেয়া তাগাদা এসএমএস পাঠান",
+                langToggle: "🇧🇩 বাংলা"
+            },
+            en: {
+                headerTitle: "Bill Manager",
+                headerSubtitle: "Smart Billing Management System",
+                dashboard: "Dashboard",
+                allBills: "All Bills",
+                paidBills: "Paid Bills",
+                dueBills: "Due Bills",
+                totalBills: "Grand Total",
+                paidAmount: "Paid Amount",
+                dueAmount: "Due Amount",
+                export: "Export",
+                refresh: "Refresh",
+                noticeBadge: "📢 Notice",
+                chartTrend: "📈 Last 7 Days Trend",
+                chartTrendSub: "Daily collection analytics",
+                chartPaidDue: "🥧 Paid vs Due",
+                chartPaidDueSub: "Collection Ratio",
+                chartMonthly: "📊 Monthly Revenue (Net + Dish Bill)",
+                chartMonthlySub: "All-months aggregated billing collection",
+                recentTx: "🔄 Recent Transactions",
+                recentTxSub: "Latest processed billing records",
+                records: "records",
+                searchPlaceholder: "Search by customer name, mobile, ID or address...",
+                tabAll: "All",
+                tabPaid: "Paid",
+                tabDue: "Due",
+                thSl: "SL",
+                thId: "ID",
+                thName: "Customer Name",
+                thPaid: "Paid",
+                thDue: "Due",
+                thTotal: "Total",
+                thMobile: "Mobile",
+                thDate: "Date",
+                thAddress: "Address",
+                thStatus: "Status",
+                modalHeader: "📄 Customer Bill Details",
+                btnPrint: "🖨️ Print Receipt",
+                btnClose: "Close",
+                btnSms: "📱 Send Due Reminder SMS",
+                langToggle: "🇬🇧 English"
+            }
+        };
+
+        // State
+        let allRecords = [];
+        let currentNet = "নেট বিল";
+        let currentMonth = localStorage.getItem('selected_month') || ALL_MONTHS[new Date().getMonth()] || "আগস্ট";
+        let currentLang = localStorage.getItem('bill_lang') || 'bn';
+        let currentView = 'dashboard';
+        let tableFilter = 'all';
+        let searchQuery = '';
+        let selectedRecord = null;
+        let trendChart = null;
+        let ratioChart = null;
+        let monthlyChart = null;
+
+        // Cache for all monthly aggregates
+        let monthlyAggregates = {
+            net: { "জানুয়ারি": 0, "ফেব্রুয়ারি": 0, "মার্চ": 0, "এপ্রিল": 0, "মে": 0, "জুন": 0, "জুলাই": 0, "আগস্ট": 0, "সেপ্টেম্বর": 0, "অক্টোবর": 0, "নভেম্বর": 0, "ডিসেম্বর": 0 },
+            dis: { "জানুয়ারি": 0, "ফেব্রুয়ারি": 0, "মার্চ": 0, "এপ্রিল": 0, "মে": 0, "জুন": 0, "জুলাই": 0, "আগস্ট": 0, "সেপ্টেম্বর": 0, "অক্টোবর": 0, "নভেম্বর": 0, "ডিসেম্বর": 0 }
+        };
+
+        // ============================================================
+        // CORS-PROOF GOOGLE SHEET FETCHER
+        // ============================================================
+        async function fetchWithCorsFallback(rawUrl) {
+            if (!rawUrl) return null;
+
+            // Strategy 1: Local server proxy endpoint
+            try {
+                const proxyUrl = `/api/fetch-sheet?url=${encodeURIComponent(rawUrl)}`;
+                const res = await fetch(proxyUrl);
+                if (res.ok) return await res.arrayBuffer();
+            } catch (e) {
+                console.warn("Local proxy failed, trying public CORS proxies...", e);
+            }
+
+            // Strategy 2: corsproxy.io
+            try {
+                const corsUrl = `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`;
+                const res = await fetch(corsUrl);
+                if (res.ok) return await res.arrayBuffer();
+            } catch (e) {
+                console.warn("corsproxy.io failed", e);
+            }
+
+            // Strategy 3: allorigins
+            try {
+                const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`);
+                if (res.ok) return await res.arrayBuffer();
+            } catch (e) {
+                console.warn("allorigins failed", e);
+            }
+
+            // Strategy 4: Direct fetch
+            try {
+                const res = await fetch(rawUrl);
+                if (res.ok) return await res.arrayBuffer();
+            } catch (e) {
+                console.error("Direct fetch blocked by CORS", e);
+            }
+
+            return null;
+        }
+
+        // ============================================================
+        // PARSERS (STARTS EXACTLY FROM ROW A6 FOR NET AND DIS BILL)
+        // ============================================================
+        function parseAmount(val) {
+            if (val === undefined || val === null) return 0;
+            if (typeof val === 'number') return isNaN(val) ? 0 : val;
+            const cleaned = String(val).replace(/[^0-9.-]/g, '');
+            const num = parseFloat(cleaned);
+            return isNaN(num) ? 0 : num;
+        }
+
+        function formatPhone(s) {
+            if (!s || s === "---" || s === "-") return "---";
+            let clean = String(s).replace(/\D/g, '');
+            if (clean.startsWith('880') && clean.length === 13) clean = '0' + clean.slice(3);
+            else if (clean.length === 11 && clean.startsWith('01')) return clean;
+            else if (clean.length === 10 && !clean.startsWith('0')) clean = '0' + clean;
+            return clean.length >= 10 ? clean : String(s);
+        }
+
+        // Helper to convert Bengali digits to English digits
+        function toEnglishDigits(str) {
+            if (str === null || str === undefined) return '';
+            const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+            let res = String(str);
+            for (let i = 0; i < 10; i++) {
+                res = res.replaceAll(bnDigits[i], String(i));
+            }
+            return res;
+        }
+
+        function parseExcelDate(val) {
+            if (!val || val === "-" || val === "---") return "-";
+            if (typeof val === 'number' && val > 1) {
+                const d = new Date((val - 25569) * 86400000);
+                if (!isNaN(d.getTime())) {
+                    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+                }
+            }
+            if (typeof val === 'string') {
+                const eng = toEnglishDigits(val.trim());
+                const isoMatch = eng.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);
+                if (isoMatch) return `${isoMatch[3].padStart(2, '0')}/${isoMatch[2].padStart(2, '0')}/${isoMatch[1]}`;
+                const dmyMatch = eng.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})/);
+                if (dmyMatch) {
+                    const yr = dmyMatch[3].length === 2 ? `20${dmyMatch[3]}` : dmyMatch[3];
+                    return `${dmyMatch[1].padStart(2, '0')}/${dmyMatch[2].padStart(2, '0')}/${yr}`;
+                }
+                return eng;
+            }
+            return "-";
+        }
+
+        // Helper to parse dates like DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD
+        function parseDateForSort(dateStr) {
+            if (!dateStr || dateStr === "-" || dateStr === "---") return null;
+            const clean = toEnglishDigits(dateStr.trim());
+            const parts = clean.split(/[\/\-\.]/);
+            if (parts.length === 3) {
+                if (parts[0].length === 4) {
+                    return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                } else {
+                    const yr = parts[2].length === 2 ? 2000 + parseInt(parts[2]) : parseInt(parts[2]);
+                    return new Date(yr, parseInt(parts[1]) - 1, parseInt(parts[0]));
+                }
+            }
+            return null;
+        }
+
+        function isLikelyPhoneNumber(val) {
+            if (!val) return false;
+            const str = toEnglishDigits(String(val)).trim().replace(/[\s\-\(\)\.]/g, '');
+            return (str.startsWith('01') && str.length >= 10 && str.length <= 13) ||
+                   (str.startsWith('8801') && str.length >= 13) ||
+                   (str.startsWith('+8801'));
+        }
+
+        function isLikelyDateString(val) {
+            if (!val) return false;
+            if (typeof val === 'number' && val > 30000 && val < 60000) return true;
+            const str = toEnglishDigits(String(val)).trim();
+            return /^(\d{1,4})[\/\-\.](\d{1,2})[\/\-\.](\d{1,4})/.test(str);
+        }
+
+        // ============================================================
+        // PRECISE COLUMN PARSERS
+        // Net Bill: A6 to I6 (SL, ID, Name, Pay, Due, Total, Date, Mobile, Address)
+        // Dis Bill: A6 to H6 (SL, Name, Pay, Due, Total, Date, Mobile, Address)
+        // Net Conn: A6 to J6 (SL, ID, Name, Pay, Due, Total, Date, Mobile, Address, Status/Package)
+        // Due Bill: A6 to J6 (SL, ID, Name, Pay, Due, Total, Date, Mobile, Address, Status/Remarks)
+        // ============================================================
+        function parseWorkbook(wb, netType) {
+            if (!wb || !wb.SheetNames || wb.SheetNames.length === 0) return [];
+            const sheet = wb.Sheets[wb.SheetNames[0]];
+            const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: "" });
+            if (!rows || rows.length < 2) return [];
+
+            const isDis = (netType === "ডিস বিল");
+            const hasId = !isDis; // "নেট বিল", "নেট সংযোগ", "বকেয়া বিল" all have ID in column B (index 1)
+            
+            // Exactly from Row 6 (0-indexed row 5 = A6)
+            const startRow = 5;
+
+            const records = [];
+            const seen = new Set();
+
+            for (let i = startRow; i < rows.length; i++) {
+                const row = rows[i];
+                if (!row || row.length < 2) continue;
+                const firstCell = row[0] ? String(row[0]).trim() : "";
+                if (firstCell.includes("মোট") || firstCell === "0" || firstCell === "০") continue;
+
+                let uid = null;
+                let name = "";
+
+                if (hasId) {
+                    uid = row[1] ? String(row[1]).trim() : "";
+                    name = row[2] ? String(row[2]).trim() : "";
+                } else {
+                    uid = null;
+                    name = row[1] ? String(row[1]).trim() : "";
+                }
+
+                if (!name && !uid) continue;
+                if (name.includes("মোট") || name.toLowerCase().includes("total")) continue;
+
+                const unique = hasId ? `${uid}_${name}_${i}` : `${name}_${i}`;
+                if (seen.has(unique)) continue;
+                seen.add(unique);
+
+                const pay = hasId ? parseAmount(row[3]) : parseAmount(row[2]);
+                const due = hasId ? parseAmount(row[4]) : parseAmount(row[3]);
+                const sheetTotal = hasId ? parseAmount(row[5]) : parseAmount(row[4]);
+                const total = sheetTotal > 0 ? sheetTotal : (pay + due);
+
+                let rawDate = hasId ? row[6] : row[5];
+                let rawMob = hasId ? row[7] : row[6];
+                const rawAddr = hasId ? row[8] : row[7];
+                const rawStatus = (netType === "নেট সংযোগ" || netType === "বকেয়া বিল") ? (row[9] ? String(row[9]).trim() : "") : "";
+
+                // Safety swap if date & phone were inverted in a specific sheet
+                if (isLikelyPhoneNumber(rawDate) && !isLikelyPhoneNumber(rawMob)) {
+                    const temp = rawDate;
+                    rawDate = rawMob;
+                    rawMob = temp;
+                } else if (isLikelyDateString(rawMob) && !isLikelyDateString(rawDate)) {
+                    const temp = rawDate;
+                    rawDate = rawMob;
+                    rawMob = temp;
+                }
+
+                let finalStatus = rawStatus;
+                if (!finalStatus) {
+                    if (due === 0 && pay > 0) finalStatus = "পরিশোধিত";
+                    else if (due > 0 && pay > 0) finalStatus = "আংশিক";
+                    else if (due > 0 && pay === 0) finalStatus = "বকেয়া";
+                    else finalStatus = "পরিশোধিত";
+                }
+
+                records.push({
+                    id: hasId ? (uid || "-----") : null,
+                    name: name || "নাম নেই",
+                    pay: pay,
+                    due: due,
+                    total: total,
+                    date: parseExcelDate(rawDate),
+                    mob: formatPhone(rawMob),
+                    address: rawAddr ? String(rawAddr).trim() : "---",
+                    status: finalStatus
+                });
+            }
+            return records;
+        }
+
+        // ============================================================
+        // ASYNC BACKGROUND MONTHLY DATA LOADER (ALL MONTHS)
+        // ============================================================
+        async function preloadAllMonthlyAggregates() {
+            const savedAgg = localStorage.getItem('bill_monthly_aggregates');
+            if (savedAgg) {
+                try {
+                    monthlyAggregates = JSON.parse(savedAgg);
+                    renderMonthlyIncomeChart();
+                } catch(e) {}
+            }
+
+            const monthsToFetch = ["এপ্রিল", "মে", "জুন", "জুলাই", "আগস্ট"];
+
+            for (const m of monthsToFetch) {
+                // 1. Net Bill
+                const netUrl = NET_BILL_LINKS[m];
+                if (netUrl && !monthlyAggregates.net[m]) {
+                    try {
+                        const buffer = await fetchWithCorsFallback(netUrl);
+                        if (buffer) {
+                            const wb = XLSX.read(buffer, { type: 'array' });
+                            const recs = parseWorkbook(wb, "নেট বিল");
+                            const sumPay = recs.reduce((s, r) => s + (r.pay || 0), 0);
+                            monthlyAggregates.net[m] = sumPay;
+                            localStorage.setItem(`bill_v4_নেট বিল_${m}`, JSON.stringify(recs));
+                        }
+                    } catch(e) {}
+                }
+
+                // 2. Dis Bill
+                const disUrl = DIS_BILL_LINKS[m];
+                if (disUrl && !monthlyAggregates.dis[m]) {
+                    try {
+                        const buffer = await fetchWithCorsFallback(disUrl);
+                        if (buffer) {
+                            const wb = XLSX.read(buffer, { type: 'array' });
+                            const recs = parseWorkbook(wb, "ডিস বিল");
+                            const sumPay = recs.reduce((s, r) => s + (r.pay || 0), 0);
+                            monthlyAggregates.dis[m] = sumPay;
+                            localStorage.setItem(`bill_v4_ডিস বিল_${m}`, JSON.stringify(recs));
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            localStorage.setItem('bill_monthly_aggregates', JSON.stringify(monthlyAggregates));
+            renderMonthlyIncomeChart();
+        }
+
+        // ============================================================
+        // DATA LOADER
+        // ============================================================
+        async function loadData() {
+            const statusNotice = document.getElementById('statusNotice');
+            const tbody = document.getElementById('tableBody');
+            let links = NET_BILL_LINKS;
+            if (currentNet === "ডিস বিল") links = DIS_BILL_LINKS;
+            else if (currentNet === "নেট সংযোগ") links = NET_CONN_LINKS;
+            else if (currentNet === "বকেয়া বিল") links = DUE_BILL_LINKS;
+
+            const url = links[currentMonth];
+            const cacheKey = `bill_v4_${currentNet}_${currentMonth}`;
+            const isDisBill = (currentNet === "ডিস বিল");
+            const colSpan = isDisBill ? 9 : 10;
+
+            // Check if online or offline
+            const isOnline = (typeof navigator.onLine === 'boolean') ? navigator.onLine : true;
+
+            if (!url) {
+                statusNotice.style.display = 'block';
+                statusNotice.style.background = '#fef3c7';
+                statusNotice.style.color = '#92400e';
+                statusNotice.innerHTML = `⚠️ ${currentNet} - ${currentMonth} মাসের জন্য কোনো অনলাইন শিট লিংক যুক্ত নেই।`;
+                allRecords = [];
+                renderAll();
+                return;
+            }
+
+            // Case 1: OFFLINE (No Internet) - Only then load from cache
+            if (!isOnline) {
+                const cached = localStorage.getItem(cacheKey);
+                if (cached) {
+                    try {
+                        allRecords = JSON.parse(cached);
+                        statusNotice.style.display = 'block';
+                        statusNotice.style.background = '#e0f2fe';
+                        statusNotice.style.color = '#0369a1';
+                        statusNotice.innerHTML = `📡 <strong>অফলাইন মোড:</strong> ইন্টারনেট সংযোগ নেই — পূর্বের সংরক্ষিত অফলাইন ক্যাশ ডেটা দেখানো হচ্ছে (${allRecords.length} টি বিল)।`;
+                        updateMonthlyCurrentAggregate();
+                        renderAll();
+                        return;
+                    } catch(e) {}
+                }
+                // No cache available while offline
+                statusNotice.style.display = 'block';
+                statusNotice.style.background = '#fee2e2';
+                statusNotice.style.color = '#991b1b';
+                statusNotice.innerHTML = `⚠️ ইন্টারনেট সংযোগ বিচ্ছিন্ন এবং ${currentNet} (${currentMonth}) এর কোনো সংরক্ষিত অফলাইন ডেটা পাওয়া যায়নি।`;
+                allRecords = [];
+                renderAll();
+                return;
+            }
+
+            // Case 2: ONLINE (Internet is available) - Do NOT show cache, fetch live data
+            allRecords = [];
+            renderStats();
+            renderRecentActivity();
+            
+            // Show animated loading indicator on the table
+            if (tbody) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="${colSpan}" style="padding: 0;">
+                            <div class="table-loading-wrap">
+                                <div class="loading-spinner"></div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">
+                                    ⏳ ${currentNet} (${currentMonth}) এর লাইভ ডেটা লোড হচ্ছে, অনুগ্রহ করে অপেক্ষা করুন...
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted);">
+                                    Google Sheet থেকে সরাসরি সর্বশেষ আপডেট সংগ্রহ করা হচ্ছে
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            statusNotice.style.display = 'none';
+
+            try {
+                const buffer = await fetchWithCorsFallback(url);
+                if (buffer) {
+                    const wb = XLSX.read(buffer, { type: 'array' });
+                    allRecords = parseWorkbook(wb, currentNet);
+                    // Save to cache for emergency offline use only
+                    localStorage.setItem(cacheKey, JSON.stringify(allRecords));
+                    statusNotice.style.display = 'none';
+                    updateMonthlyCurrentAggregate();
+                    renderAll();
+                } else {
+                    throw new Error("Empty data received");
+                }
+            } catch (err) {
+                console.warn("Live fetch failed, trying fallback cache:", err);
+                const cached = localStorage.getItem(cacheKey);
+                if (cached) {
+                    try {
+                        allRecords = JSON.parse(cached);
+                        statusNotice.style.display = 'block';
+                        statusNotice.style.background = '#fef3c7';
+                        statusNotice.style.color = '#92400e';
+                        statusNotice.innerHTML = `⚠️ লাইভ সার্ভার সংযোগ পেতে সমস্যা হয়েছে — সংরক্ষিত ক্যাশ ডেটা দেখানো হচ্ছে (${allRecords.length} টি বিল)।`;
+                        updateMonthlyCurrentAggregate();
+                        renderAll();
+                        return;
+                    } catch(e) {}
+                }
+                statusNotice.style.display = 'block';
+                statusNotice.style.background = '#fee2e2';
+                statusNotice.style.color = '#991b1b';
+                statusNotice.innerHTML = `❌ ${currentNet} (${currentMonth}) এর ডেটা লোড করা সম্ভব হয়নি। ইন্টারনেট সংযোগ বা শিট লিংক পরীক্ষা করুন।`;
+                allRecords = [];
+                renderAll();
+            }
+        }
+
+        function updateMonthlyCurrentAggregate() {
+            const sumPay = allRecords.reduce((s, r) => s + (r.pay || 0), 0);
+            if (currentNet === "নেট বিল") {
+                monthlyAggregates.net[currentMonth] = sumPay;
+            } else if (currentNet === "ডিস বিল") {
+                monthlyAggregates.dis[currentMonth] = sumPay;
+            }
+            localStorage.setItem('bill_monthly_aggregates', JSON.stringify(monthlyAggregates));
+        }
+
+        // ============================================================
+        // RENDER FUNCTIONS
+        // ============================================================
+        function renderAll() {
+            renderStats();
+            renderCharts();
+            renderMonthlyIncomeChart();
+            renderRecentActivity();
+            renderTable();
+        }
+
+        function renderStats() {
+            const count = allRecords.length;
+            const totalPay = allRecords.reduce((s, r) => s + (r.pay || 0), 0);
+            const totalDue = allRecords.reduce((s, r) => s + (r.due || 0), 0);
+            const grandTotal = totalPay + totalDue;
+
+            document.getElementById('statAllCount').innerText = count;
+            document.getElementById('statMonthName').innerText = `${currentMonth} মাস`;
+
+            document.getElementById('statPaidTotal').innerText = `${totalPay.toLocaleString()} ৳`;
+            document.getElementById('statPaidRate').innerText = `${count > 0 ? Math.round((totalPay / (grandTotal || 1)) * 100) : 0}% আদায়`;
+
+            document.getElementById('statDueTotal').innerText = `${totalDue.toLocaleString()} ৳`;
+            document.getElementById('statDueRate').innerText = `${count > 0 ? Math.round((totalDue / (grandTotal || 1)) * 100) : 0}% বাকি`;
+
+            document.getElementById('statGrandTotal').innerText = `${grandTotal.toLocaleString()} ৳`;
+            document.getElementById('statTotalBills').innerText = `${count} টি বিল`;
+        }
+
+        function renderRecentActivity() {
+            const container = document.getElementById('recentActivityList');
+            const recentCount = document.getElementById('recentTxCount');
+            const isDisBill = (currentNet === "ডিস বিল");
+            
+            // Prioritize actual transactions with collections (pay > 0)
+            let paidList = allRecords.filter(r => (r.pay || 0) > 0);
+            
+            // Sort by date if available (newest first)
+            paidList.sort((a, b) => {
+                const da = parseDateForSort(a.date);
+                const db = parseDateForSort(b.date);
+                if (da && db) return db - da;
+                return 0;
+            });
+
+            const list = paidList.length > 0 ? paidList.slice(0, 6) : allRecords.slice(0, 6);
+            recentCount.innerText = `${paidList.length > 0 ? paidList.length : allRecords.length} ${I18N[currentLang].records}`;
+
+            if (!list.length) {
+                container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);">কোনো লেনদেন রেকর্ড নেই</div>`;
+                return;
+            }
+
+            let html = '';
+            list.forEach(r => {
+                const isPaid = r.due === 0;
+                const statusClass = isPaid ? 'paid' : (r.pay > 0 ? 'partial' : 'due');
+                const statusText = r.status || (isPaid ? 'পরিশোধিত' : (r.pay > 0 ? 'আংশিক' : 'বকেয়া'));
+
+                const dueInfo = r.due > 0 
+                    ? `<div style="font-size:11px;color:#ef4444;font-weight:600;margin-top:2px;">বকেয়া: ${r.due.toLocaleString()} ৳</div>`
+                    : `<div style="font-size:11px;color:#10b981;font-weight:600;margin-top:2px;">বকেয়া নেই</div>`;
+
+                const idLabel = (!isDisBill && r.id && r.id !== '-----') ? `<span style="font-size:11px;color:var(--text-muted);font-weight:normal;margin-left:4px;">(${escapeHtml(r.id)})</span>` : '';
+
+                html += `
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 8px;border-bottom:1px solid var(--border-color);cursor:pointer;" onclick='showCustomerDetail(${JSON.stringify(r).replace(/'/g, "&apos;")})'>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:36px;height:36px;border-radius:50%;background:var(--primary-soft);color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;">
+                                ${r.name ? r.name.charAt(0) : '?'}
+                            </div>
+                            <div>
+                                <div style="font-weight:700;font-size:13px;color:var(--text-primary);">${escapeHtml(r.name)}${idLabel}</div>
+                                <div style="font-size:11px;color:var(--text-muted);">${escapeHtml(r.mob || "---")} • ${escapeHtml(r.date && r.date !== '-' ? r.date : currentMonth)}</div>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:800;font-size:14px;color:#10b981;">+${(r.pay || 0).toLocaleString()} ৳</div>
+                            ${dueInfo}
+                            <span class="badge-status ${statusClass}" style="margin-top:2px;">${statusText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function renderCharts() {
+            // 1. Last 7 Days Collection Trend Chart (Real Date & Real Payment aggregation)
+            const trendCtx = document.getElementById('dailyTrendChart');
+            if (trendCtx) {
+                if (trendChart) trendChart.destroy();
+
+                const dateMap = {};
+                allRecords.forEach(r => {
+                    if ((r.pay || 0) > 0) {
+                        const dStr = (r.date && r.date !== '-' && r.date !== '---') ? r.date.trim() : null;
+                        if (dStr) {
+                            dateMap[dStr] = (dateMap[dStr] || 0) + r.pay;
+                        }
+                    }
+                });
+
+                let labels = [];
+                let values = [];
+                const distinctDates = Object.keys(dateMap);
+
+                if (distinctDates.length > 0) {
+                    distinctDates.sort((a, b) => {
+                        const da = parseDateForSort(a);
+                        const db = parseDateForSort(b);
+                        if (da && db) return da - db;
+                        return a.localeCompare(b);
+                    });
+
+                    const last7 = distinctDates.slice(-7);
+                    labels = last7;
+                    values = last7.map(d => dateMap[d]);
+                } else {
+                    // Fallback to 7 days if records don't have explicit dates
+                    const days = ['শনি', 'রবি', 'সোম', 'মঙ্গল', 'বুধ', 'বৃহস্পতি', 'শুক্র'];
+                    labels = days;
+                    values = [0, 0, 0, 0, 0, 0, 0];
+                    const paidList = allRecords.filter(r => (r.pay || 0) > 0);
+                    if (paidList.length > 0) {
+                        paidList.forEach((r, idx) => {
+                            values[idx % 7] += (r.pay || 0);
+                        });
+                    }
+                }
+
+                trendChart = new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'আদায় (৳)',
+                            data: values,
+                            borderColor: getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ea580c',
+                            backgroundColor: 'rgba(234, 88, 12, 0.08)',
+                            fill: true,
+                            tension: 0.35,
+                            pointRadius: 4,
+                            pointHoverRadius: 6
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `আদায়: ${context.parsed.y.toLocaleString()} ৳`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(0,0,0,0.05)' },
+                                ticks: {
+                                    callback: function(v) { return v.toLocaleString() + ' ৳'; }
+                                }
+                            },
+                            x: {
+                                grid: { display: false }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // 2. Ratio Chart
+            const ratioCtx = document.getElementById('paidDueChart');
+            if (ratioCtx) {
+                if (ratioChart) ratioChart.destroy();
+                const totalPay = allRecords.reduce((s, r) => s + (r.pay || 0), 0);
+                const totalDue = allRecords.reduce((s, r) => s + (r.due || 0), 0);
+
+                ratioChart = new Chart(ratioCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [I18N[currentLang].paidBills, I18N[currentLang].dueBills],
+                        datasets: [{
+                            data: [totalPay, totalDue],
+                            backgroundColor: ['#10b981', '#ef4444'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+                        },
+                        cutout: '70%'
+                    }
+                });
+            }
+        }
+
+        // ============================================================
+        // MONTHLY INCOME (NET + DISH) FOR ALL MONTHS
+        // ============================================================
+        function renderMonthlyIncomeChart() {
+            const ctx = document.getElementById('monthlyIncomeChart');
+            if (!ctx) return;
+            if (monthlyChart) monthlyChart.destroy();
+
+            const netValues = ALL_MONTHS.map(m => monthlyAggregates.net[m] || 0);
+            const disValues = ALL_MONTHS.map(m => monthlyAggregates.dis[m] || 0);
+
+            const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim() || '#ea580c';
+
+            monthlyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ALL_MONTHS,
+                    datasets: [
+                        {
+                            label: currentLang === 'bn' ? 'নেট বিল (Net Bill)' : 'Net Bill',
+                            data: netValues,
+                            backgroundColor: primaryColor,
+                            borderRadius: 4
+                        },
+                        {
+                            label: currentLang === 'bn' ? 'ডিস বিল (Dish Bill)' : 'Dish Bill',
+                            data: disValues,
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            labels: { boxWidth: 12, font: { size: 11, family: 'Hind Siliguri' } }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' },
+                            ticks: { font: { size: 10 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 10, family: 'Hind Siliguri' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ============================================================
+        // RENDER TABLE (HIDES ID FOR DISH BILL PER REQUIREMENT)
+        // ============================================================
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const isDisBill = (currentNet === "ডিস বিল");
+
+            // Toggle ID header column
+            const thId = document.getElementById('thId');
+            if (thId) {
+                thId.style.display = isDisBill ? 'none' : '';
+            }
+
+            // Filter
+            let list = allRecords.slice();
+            if (tableFilter === 'paid') list = list.filter(r => r.due === 0);
+            else if (tableFilter === 'due') list = list.filter(r => r.due > 0);
+
+            // Search
+            if (searchQuery) {
+                const q = searchQuery.toLowerCase();
+                list = list.filter(r => 
+                    (r.name && r.name.toLowerCase().includes(q)) ||
+                    (r.mob && r.mob.includes(q)) ||
+                    (!isDisBill && r.id && r.id.toLowerCase().includes(q)) ||
+                    (r.address && r.address.toLowerCase().includes(q))
+                );
+            }
+
+            const colSpan = isDisBill ? 9 : 10;
+            if (!list.length) {
+                tbody.innerHTML = `<tr><td colspan="${colSpan}" style="padding:28px;text-align:center;color:var(--text-muted);">কোনো বিলের তথ্য পাওয়া যায়নি</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            list.forEach((r, idx) => {
+                const isPaid = r.due === 0;
+                const statusClass = isPaid ? 'paid' : (r.pay > 0 ? 'partial' : 'due');
+                const statusText = r.status || (isPaid ? 'পরিশোধিত' : (r.pay > 0 ? 'আংশিক' : 'বকেয়া'));
+
+                // Conditional due styling: if due === 0, use amount-zero (not red!)
+                const dueCell = r.due > 0 
+                    ? `<td class="amount-due">${r.due.toLocaleString()} ৳</td>`
+                    : `<td class="amount-zero">0 ৳</td>`;
+
+                // Conditional total styling: if due > 0, always red regardless of theme!
+                const totalCell = r.due > 0
+                    ? `<td class="amount-total has-due">${(r.pay + r.due).toLocaleString()} ৳</td>`
+                    : `<td class="amount-total">${(r.pay + r.due).toLocaleString()} ৳</td>`;
+
+                html += `
+                    <tr onclick='showCustomerDetail(${JSON.stringify(r).replace(/'/g, "&apos;")})'>
+                        <td>${idx + 1}</td>
+                        ${!isDisBill ? `<td>${escapeHtml(r.id || "---")}</td>` : ''}
+                        <td class="name-cell">${escapeHtml(r.name)}</td>
+                        <td class="amount-paid">${r.pay.toLocaleString()} ৳</td>
+                        ${dueCell}
+                        ${totalCell}
+                        <td>${escapeHtml(r.mob)}</td>
+                        <td>${escapeHtml(r.date)}</td>
+                        <td>${escapeHtml(r.address.substring(0, 30))}</td>
+                        <td><span class="badge-status ${statusClass}">${statusText}</span></td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // ============================================================
+        // MODAL & ACTIONS
+        // ============================================================
+        function showCustomerDetail(rec) {
+            selectedRecord = rec;
+            const body = document.getElementById('modalBody');
+
+            const isPaid = rec.due === 0;
+            const statusClass = isPaid ? 'paid' : (rec.pay > 0 ? 'partial' : 'due');
+            const statusText = rec.status || (isPaid ? 'পরিশোধিত' : (rec.pay > 0 ? 'আংশিক' : 'বকেয়া'));
+
+            // Conditional due styling: no red if due is 0
+            const dueDisplay = rec.due > 0 
+                ? `<span style="color:#ef4444;font-weight:700;">${rec.due.toLocaleString()} ৳</span>`
+                : `<span style="color:#10b981;font-weight:700;">০ ৳ (কোনো বকেয়া নেই)</span>`;
+
+            // Conditional total styling: red if due > 0, otherwise primary theme color
+            const totalDisplay = rec.due > 0
+                ? `<span style="color:#ef4444;font-weight:700;">${(rec.pay + rec.due).toLocaleString()} ৳</span>`
+                : `<span style="color:var(--primary);font-weight:700;">${(rec.pay + rec.due).toLocaleString()} ৳</span>`;
+
+            body.innerHTML = `
+                <div class="detail-row"><div class="detail-label">গ্রাহকের নাম:</div><div class="detail-value"><strong>${escapeHtml(rec.name)}</strong></div></div>
+                ${rec.id ? `<div class="detail-row"><div class="detail-label">আইডি:</div><div class="detail-value"><span>${escapeHtml(rec.id)}</span> <button class="copy-pill" onclick="copyText('${rec.id}')">কপি</button></div></div>` : ''}
+                <div class="detail-row"><div class="detail-label">মোবাইল:</div><div class="detail-value"><span>${escapeHtml(rec.mob)}</span> <button class="copy-pill" onclick="copyText('${rec.mob}')">কপি</button></div></div>
+                <div class="detail-row"><div class="detail-label">পরিশোধিত:</div><div class="detail-value"><span style="color:#10b981;font-weight:700;">${rec.pay.toLocaleString()} ৳</span></div></div>
+                <div class="detail-row"><div class="detail-label">বকেয়া টাকা:</div><div class="detail-value">${dueDisplay}</div></div>
+                <div class="detail-row"><div class="detail-label">সর্বমোট:</div><div class="detail-value">${totalDisplay}</div></div>
+                <div class="detail-row"><div class="detail-label">তারিখ:</div><div class="detail-value">${escapeHtml(rec.date)}</div></div>
+                <div class="detail-row"><div class="detail-label">ঠিকানা:</div><div class="detail-value">${escapeHtml(rec.address)}</div></div>
+                <div class="detail-row"><div class="detail-label">স্ট্যাটাস:</div><div class="detail-value"><span class="badge-status ${statusClass}">${statusText}</span></div></div>
+            `;
+
+            document.getElementById('customerModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('customerModal').classList.remove('active');
+        }
+
+        function copyText(txt) {
+            navigator.clipboard.writeText(txt);
+            showToast('📋 ক্লিপবোর্ডে কপি হয়েছে', 'success');
+        }
+
+        function sendDueSms() {
+            if (!selectedRecord) return;
+            const r = selectedRecord;
+            const cleanPhone = (r.mob || '').replace(/[^0-9+]/g, '');
+            const smsText = `প্রিয় গ্রাহক ${r.name}, আপনার ${currentNet} বাবদ বকেয়া ${r.due.toLocaleString()} টাকা দ্রুত পরিশোধ করার জন্য বিনীত অনুরোধ করা হচ্ছে। ধন্যবাদ - বিল ম্যানেজার।`;
+            
+            // 1. Copy to clipboard
+            try {
+                navigator.clipboard.writeText(smsText);
+            } catch(e) {}
+
+            // 2. Launch device native SMS app
+            if (cleanPhone && cleanPhone.length >= 8) {
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                const separator = isIOS ? '&' : '?';
+                const smsUrl = `sms:${cleanPhone}${separator}body=${encodeURIComponent(smsText)}`;
+                window.location.href = smsUrl;
+                showToast('📱 এসএমএস সফটওয়্যার ওপেন হয়েছে ও টেক্সট কপি হয়েছে', 'success');
+            } else {
+                showToast('📋 এসএমএস টেক্সট কপি হয়েছে (সঠিক মোবাইল নম্বর নেই)', 'warning');
+            }
+        }
+
+        function printReceipt() {
+            const r = selectedRecord || (allRecords.length > 0 ? allRecords[0] : null);
+            if (!r) {
+                showToast('প্রিন্ট করার মতো গ্রাহকের তথ্য নেই', 'warning');
+                return;
+            }
+
+            const isDisBill = (currentNet === "ডিস বিল");
+            const receiptNo = 'BM-' + Math.floor(10000 + Math.random() * 90000);
+            const printDate = r.date && r.date !== '-' ? r.date : new Date().toLocaleDateString('bn-BD');
+            const printArea = document.getElementById('receiptPrintArea');
+
+            const dueRow = r.due > 0
+                ? `<div class="print-summary-row" style="color:#b91c1c;"><span>বকেয়া টাকা (Due):</span><span style="font-weight:700;">${r.due.toLocaleString()} ৳</span></div>`
+                : `<div class="print-summary-row" style="color:#15803d;"><span>বকেয়া টাকা (Due):</span><span style="font-weight:700;">০ ৳ (কোনো বকেয়া নেই)</span></div>`;
+
+            printArea.innerHTML = `
+                <div class="print-receipt-container">
+                    <div class="print-header">
+                        <h2>বিল ম্যানেজার (Money Receipt)</h2>
+                        <p>স্মার্ট বিলিং ও কালেকশন সিস্টেম • মানি রসিদ (গ্রাহক কপি)</p>
+                    </div>
+                    <div class="print-info-grid">
+                        <div class="print-info-item"><strong>রসিদ নং:</strong> <span>${receiptNo}</span></div>
+                        <div class="print-info-item"><strong>তারিখ:</strong> <span>${printDate}</span></div>
+                        <div class="print-info-item"><strong>গ্রাহকের নাম:</strong> <span><strong>${escapeHtml(r.name)}</strong></span></div>
+                        ${!isDisBill && r.id ? `<div class="print-info-item"><strong>গ্রাহক আইডি:</strong> <span>${escapeHtml(r.id)}</span></div>` : ''}
+                        <div class="print-info-item"><strong>মোবাইল:</strong> <span>${escapeHtml(r.mob || "---")}</span></div>
+                        <div class="print-info-item"><strong>সেবার ধরন:</strong> <span>${escapeHtml(currentNet)} (${currentMonth} মাস)</span></div>
+                        <div class="print-info-item" style="grid-column: span 2;"><strong>ঠিকানা:</strong> <span>${escapeHtml(r.address || "---")}</span></div>
+                    </div>
+
+                    <table class="print-table">
+                        <thead>
+                            <tr>
+                                <th>বিবরণ (Description)</th>
+                                <th>বিলের মাস</th>
+                                <th style="text-align:right;">পরিমাণ (Amount)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${escapeHtml(currentNet)} সেবা ফি বাবদ</td>
+                                <td>${currentMonth}</td>
+                                <td style="text-align:right;">${(r.pay + r.due).toLocaleString()} ৳</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="print-summary">
+                        <div class="print-summary-row" style="color:#15803d;">
+                            <span>পরিশোধিত টাকা (Paid):</span>
+                            <span style="font-weight:700;">${r.pay.toLocaleString()} ৳</span>
+                        </div>
+                        ${dueRow}
+                        <div class="print-summary-row total">
+                            <span>সর্বমোট বিল (Total):</span>
+                            <span>${(r.pay + r.due).toLocaleString()} ৳</span>
+                        </div>
+                    </div>
+
+                    <div class="print-signatures">
+                        <div class="print-sign-box">গ্রাহকের স্বাক্ষর</div>
+                        <div class="print-sign-box">আদায়কারীর স্বাক্ষর</div>
+                    </div>
+
+                    <div class="print-footer">
+                        আমাদের সেবা গ্রহণ করার জন্য আপনাকে ধন্যবাদ! • বিল ম্যানেজার সিস্টেম
+                    </div>
+                </div>
+            `;
+
+            window.print();
+        }
+
+        function exportCurrentTable() {
+            if (!allRecords.length) {
+                showToast('এক্সপোর্ট করার মতো কোনো ডেটা নেই', 'warning');
+                return;
+            }
+            const isDisBill = (currentNet === "ডিস বিল");
+            const data = allRecords.map((r, i) => {
+                const rowObj = { "SL": i + 1 };
+                if (!isDisBill) {
+                    rowObj["ID"] = r.id || "---";
+                }
+                rowObj["Name"] = r.name;
+                rowObj["Paid"] = r.pay;
+                rowObj["Due"] = r.due;
+                rowObj["Total"] = r.total;
+                rowObj["Mobile"] = r.mob;
+                rowObj["Date"] = r.date;
+                rowObj["Address"] = r.address;
+                return rowObj;
+            });
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Bills");
+            XLSX.writeFile(wb, `Bill_${currentNet}_${currentMonth}.xlsx`);
+            showToast('📥 এক্সেল ফাইল ডাউনলোড সম্পন্ন হয়েছে', 'success');
+        }
+
+        async function handleManualRefresh() {
+            const icon = document.getElementById('refreshBtnIcon');
+            if (icon) icon.style.transform = 'rotate(360deg)';
+            showToast(currentLang === 'bn' ? '🔄 ডেটা রিফ্রেশ করা হচ্ছে...' : '🔄 Refreshing data...', 'info');
+            await loadData();
+            setTimeout(() => {
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }, 600);
+        }
+
+        // ============================================================
+        // NAVIGATION & ACTIVE STATES
+        // ============================================================
+        function navigateTo(view) {
+            currentView = view;
+            const dash = document.getElementById('viewDashboard');
+            const tab = document.getElementById('viewTable');
+
+            document.querySelectorAll('.sidebar-item').forEach(b => {
+                const onclickAttr = b.getAttribute('onclick') || '';
+                b.classList.toggle('active', onclickAttr.includes(`'${view}'`));
+            });
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                const onclickAttr = b.getAttribute('onclick') || '';
+                b.classList.toggle('active', onclickAttr.includes(`'${view}'`));
+            });
+
+            if (view === 'dashboard') {
+                dash.style.display = 'block';
+                tab.style.display = 'none';
+            } else {
+                dash.style.display = 'none';
+                tab.style.display = 'block';
+                setTableFilter(view);
+            }
+        }
+
+        function setTableFilter(filter) {
+            tableFilter = filter;
+            document.querySelectorAll('.filter-tab').forEach(t => {
+                t.classList.toggle('active', t.getAttribute('data-tab') === filter);
+            });
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                const onclickAttr = b.getAttribute('onclick') || '';
+                b.classList.toggle('active', onclickAttr.includes(`'${filter}'`));
+            });
+            renderTable();
+        }
+
+        function onSearchInput() {
+            searchQuery = document.getElementById('tableSearch').value.trim();
+            renderTable();
+        }
+
+        function onNetTypeChange() {
+            currentNet = document.getElementById('netSelect').value;
+            loadData();
+        }
+
+        function onMonthChange() {
+            currentMonth = document.getElementById('monthSelect').value;
+            localStorage.setItem('selected_month', currentMonth);
+            loadData();
+        }
+
+        // Sidebar open / close handlers
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (sidebar) sidebar.classList.remove('mobile-open');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        // Dark / Light Theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('bill_theme', isDark ? 'dark' : 'light');
+            document.getElementById('themeBtn').innerText = isDark ? '☀️' : '🌙';
+            setTimeout(() => {
+                renderCharts();
+                renderMonthlyIncomeChart();
+            }, 100);
+        }
+
+        // Accent Color Theme
+        function setColorTheme(theme) {
+            document.body.classList.remove('theme-blue', 'theme-green', 'theme-purple', 'theme-pink', 'theme-teal');
+            if (theme !== 'orange') document.body.classList.add(`theme-${theme}`);
+            document.querySelectorAll('.theme-dot').forEach(d => d.classList.toggle('active', d.classList.contains(theme)));
+            localStorage.setItem('bill_color', theme);
+            setTimeout(() => {
+                renderCharts();
+                renderMonthlyIncomeChart();
+            }, 100);
+        }
+
+        // Language Toggle
+        function toggleLanguage() {
+            currentLang = currentLang === 'bn' ? 'en' : 'bn';
+            localStorage.setItem('bill_lang', currentLang);
+            applyLanguage();
+            showToast(currentLang === 'bn' ? 'ভাষা বাংলায় পরিবর্তিত হয়েছে' : 'Language set to English', 'info');
+        }
+
+        function applyLanguage() {
+            const dict = I18N[currentLang];
+            document.getElementById('txtHeaderTitle').innerText = dict.headerTitle;
+            document.getElementById('txtHeaderSubtitle').innerText = dict.headerSubtitle;
+            document.getElementById('langBtnText').innerText = dict.langToggle;
+
+            document.getElementById('lblNavDashboard').innerText = dict.dashboard;
+            document.getElementById('lblNavAll').innerText = dict.allBills;
+            document.getElementById('lblNavPaid').innerText = dict.paidBills;
+            document.getElementById('lblNavDue').innerText = dict.dueBills;
+
+            document.getElementById('lblStatAll').innerText = dict.allBills;
+            document.getElementById('lblStatPaid').innerText = dict.paidAmount;
+            document.getElementById('lblStatDue').innerText = dict.dueAmount;
+            document.getElementById('lblStatTotal').innerText = dict.totalBills;
+
+            document.getElementById('txtChart1Title').innerText = dict.chartTrend;
+            document.getElementById('txtChart1Sub').innerText = dict.chartTrendSub;
+            document.getElementById('txtChart2Title').innerText = dict.chartPaidDue;
+            document.getElementById('txtChart2Sub').innerText = dict.chartPaidDueSub;
+            document.getElementById('txtMonthlyIncomeTitle').innerText = dict.chartMonthly;
+            document.getElementById('txtMonthlyIncomeSub').innerText = dict.chartMonthlySub;
+
+            document.getElementById('txtRecentTitle').innerText = dict.recentTx;
+            document.getElementById('txtRecentSub').innerText = dict.recentTxSub;
+
+            document.getElementById('txtExportBtn').innerText = dict.export;
+            const refreshEl = document.getElementById('txtRefreshBtn');
+            if (refreshEl) refreshEl.innerText = dict.refresh || 'রিফ্রেশ';
+            document.getElementById('tableSearch').placeholder = dict.searchPlaceholder;
+
+            document.getElementById('tabAll').innerText = dict.tabAll;
+            document.getElementById('tabPaid').innerText = dict.tabPaid;
+            document.getElementById('tabDue').innerText = dict.tabDue;
+
+            document.getElementById('thSl').innerText = dict.thSl;
+            document.getElementById('thId').innerText = dict.thId;
+            document.getElementById('thName').innerText = dict.thName;
+            document.getElementById('thPaid').innerText = dict.thPaid;
+            document.getElementById('thDue').innerText = dict.thDue;
+            document.getElementById('thTotal').innerText = dict.thTotal;
+            document.getElementById('thMobile').innerText = dict.thMobile;
+            document.getElementById('thDate').innerText = dict.thDate;
+            document.getElementById('thAddress').innerText = dict.thAddress;
+            document.getElementById('thStatus').innerText = dict.thStatus;
+
+            document.getElementById('lblBottomDash').innerText = dict.dashboard;
+            document.getElementById('lblBottomAll').innerText = dict.tabAll;
+            document.getElementById('lblBottomPaid').innerText = dict.tabPaid;
+            document.getElementById('lblBottomDue').innerText = dict.tabDue;
+
+            document.getElementById('txtModalHeader').innerText = dict.modalHeader;
+            document.getElementById('btnModalPrint').innerText = dict.btnPrint;
+            document.getElementById('btnModalClose').innerText = dict.btnClose;
+            document.getElementById('btnSendSms').innerText = dict.btnSms;
+
+            renderCharts();
+            renderMonthlyIncomeChart();
+        }
+
+        function showToast(msg, type = 'info') {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.className = `toast ${type} show`;
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        function init() {
+            // Populate Month Selector
+            const monthSel = document.getElementById('monthSelect');
+            monthSel.innerHTML = '';
+            ALL_MONTHS.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                if (m === currentMonth) opt.selected = true;
+                monthSel.appendChild(opt);
+            });
+
+            // Restore theme
+            if (localStorage.getItem('bill_theme') === 'dark') {
+                document.body.classList.add('dark');
+                document.getElementById('themeBtn').innerText = '☀️';
+            }
+            const savedColor = localStorage.getItem('bill_color') || 'orange';
+            setColorTheme(savedColor);
+
+            applyLanguage();
+            loadData();
+            preloadAllMonthlyAggregates();
+
+            // Auto-detect online/offline state changes
+            window.addEventListener('online', () => {
+                showToast('🟢 ইন্টারনেট সংযোগ সক্রিয় হয়েছে — লাইভ ডেটা লোড হচ্ছে', 'info');
+                loadData();
+            });
+            window.addEventListener('offline', () => {
+                showToast('🔴 ইন্টারনেট সংযোগ বিচ্ছিন্ন হয়েছে — অফলাইন মোড চালু', 'warning');
+                loadData();
+            });
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
